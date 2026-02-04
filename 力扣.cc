@@ -482,3 +482,384 @@
 //         return -1;
 //     }
 // };
+// 17 
+// class Solution {
+//    public:
+//     bool canConstruct(string ransomNote, string magazine) {
+//         if (ransomNote.size() > magazine.size()) {
+//             return false;
+//         }
+//         string r = ransomNote;
+//         string m = magazine;
+//         unordered_map<char, int> hash;
+//         for (char c : m) {
+//             hash[c]++;
+//         }
+//         for (char c : r) {
+//             hash[c]--;
+//             if (hash[c] < 0) {
+//                 return false;
+//             }
+//         }
+//         return true;
+//     }
+// };
+// 18 class Solution {
+//    public:
+//     vector<vector<string>> groupAnagrams(vector<string>& strs) {
+//         vector<vector<string>> result;
+//         unordered_map<string, vector<string>> hash;
+//         for (string s : strs) {
+//             string key = s;
+//             sort(key.begin(), key.end());
+//             hash[key].push_back(s);
+//         }
+//         for (auto pair : hash) {
+//             result.push_back(pair.second);
+//         }
+//         return result;
+//     }
+// };
+// 19 class Solution {
+//    public:
+//     vector<int> findAnagrams(string s, string p) {
+//         int n = s.size();
+//         int m = p.size();  // 关键：转换为有符号整数
+
+//         if (m > n)
+//             return {};  // 额外检查
+
+//         array<int, 26> cnt_p{};
+//         for (char c : p) {
+//             cnt_p[c - 'a']++;
+//         }
+
+//         vector<int> ans;
+//         array<int, 26> cnt_s{};
+
+//         for (int i = 0; i < n; i++) {
+//             cnt_s[s[i] - 'a']++;
+
+//             // 当窗口长度达到p的长度时
+//             if (i >= m - 1) {
+//                 if (cnt_s == cnt_p) {
+//                     ans.push_back(i - m + 1);
+//                 }
+//                 // 移除窗口最左边的字符
+//                 cnt_s[s[i - m + 1] - 'a']--;
+//             }
+//         }
+//         return ans;
+//     }
+// };
+// 20 class Solution {
+//    public:
+//     vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+//         unordered_map<int, int> hash;
+//         vector<int> result;
+//         for (int c : nums1) {
+//             hash[c]++;
+//         }
+//         for (int c : nums2) {
+//             if (hash[c] > 0) {
+//                 result.push_back(c);
+//             }
+//         }
+//         sort(result.begin(), result.end());
+//         auto last = unique(result.begin(), result.end());
+//         result.erase(last, result.end());
+//         return result;
+//     }
+// };
+// 21 class Solution {
+//    public:
+//     vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+//         unordered_map<int, int> num_count;
+//         for (int num : nums1) {
+//             num_count[num]++;
+//         }
+//         vector<int> result;
+//         for (int num : nums2) {
+//             if (num_count.find(num) != num_count.end() && num_count[num] > 0) {
+//                 result.push_back(num);
+//                 num_count[num]--;
+//             }
+//         }
+//         return result;
+//     }
+// };
+// 22 class Solution {
+//    public:
+//     int getsum(int n) {
+//         int sum = 0;
+//         while (n) {
+//             sum += (n % 10) * (n % 10);
+//             n /= 10;
+//         }
+//         return sum;
+//     }
+//     bool isHappy(int n) {
+//         unordered_map<int, int> hash;
+//         while (1) {
+//             int sum = getsum(n);
+//             if (sum == 1) {
+//                 return true;
+//             }
+//             if (hash.find(sum) != hash.end()) {
+//                 return false;
+//             } else {
+//                 hash[sum]++;
+//             }
+//             n = sum;
+//         }
+//     }
+// };
+// 23 class Solution {
+//    public:
+//     int fourSumCount(vector<int>& nums1,
+//                      vector<int>& nums2,
+//                      vector<int>& nums3,
+//                      vector<int>& nums4) {
+//         unordered_map<int, int> hash;
+//         int n = nums1.size();
+//         int count = 0;
+//         for (int i = 0; i < n; i++) {
+//             for (int j = 0; j < n; j++) {
+//                 int sum = nums1[i] + nums2[j];
+//                 hash[sum]++;
+//             }
+//         }
+//         for (int k = 0; k < n; k++) {
+//             for (int l = 0; l < n; l++) {
+//                 int sum = nums3[k] + nums4[l];
+//                 int target = -sum;
+//                 if (hash.find(target) != hash.end()) {
+//                     count += hash[target];
+//                 }
+//             }
+//         }
+//         return count;
+//     }
+// };
+// 24 class Solution {
+//    public:
+//     vector<vector<int>> threeSum(vector<int>& nums) {
+//         unordered_map<int, int> hash;
+//         vector<vector<int>> result;
+//         int n = nums.size();
+//         if (n < 3) {
+//             return result;
+//         }
+//         sort(nums.begin(), nums.end());
+//         for (int i = 0; i < n; i++) {
+//             hash[nums[i]] = i;
+//         }
+//         for (int i = 0; i < n; ++i) {
+//             if (i > 0 && nums[i] == nums[i - 1]) {
+//                 continue;
+//             }
+//             for (int j = i + 1; j < n; ++j) {
+//                 if (j > i + 1 && nums[j] == nums[j - 1]) {
+//                     continue;
+//                 }
+//                 int target = -(nums[i] + nums[j]);
+//                 if (hash.count(target) && hash[target] > j) {
+//                     result.push_back({nums[i], nums[j], target});
+//                 }
+//             }
+//         }
+//         return result;
+//     }
+// };
+// 25 class Solution {
+//    public:
+//     void reverseString(vector<char>& s) {
+//         int n = s.size();
+//         string r;
+//         for (int i = n - 1; i >= 0; i--) {
+//             r += s[i];
+//         }
+//         for (int i = 0; i < n; i++) {
+//             s[i] = r[i];
+//         }
+//     }
+// };
+// 26 class Solution {
+//    public:
+//     string reverseStr(string s, int k) {
+//         for (int i = 0; i < s.size(); i += (2 * k)) {
+//             if (i + k <= s.size()) {
+//                 reverse(s.begin() + i, s.begin() + i + k);
+//             } else {
+//                 reverse(s.begin() + i, s.end());
+//             }
+//         }
+//         return s;
+//     }
+// };
+// 27 class Solution {
+//    public:
+//     int strStr(string haystack, string needle) {
+//         int idx = haystack.find(needle, 0);
+//         if (idx == string::npos) {
+//             idx = -1;
+//         }
+//         return idx;
+//     }
+// };
+// 28 class Solution {
+//    public:
+//     bool repeatedSubstringPattern(string s) {
+//         int n = s.size();
+//         for (int len = 1; len <= n / 2; ++len) {
+//             if (n % len != 0) {
+//                 continue;
+//             }
+//             bool match = true;
+//             for (int i = len; i < n; ++i) {
+//                 if (s[i] != s[i - len]) {
+//                     match = false;
+//                 }
+//             }
+//             if (match) {
+//                 return true;
+//             }
+//         }
+//         return false;
+//         ;
+//     }
+// };
+// 29 class Solution {
+//    public:
+//     string reverseWords(string s) {
+//         stringstream ss(s);
+//         string word;
+//         vector<string> words;
+//         while (ss >> word) {
+//             words.push_back(word);
+//         }
+//         reverse(words.begin(), words.end());
+//         int n = words.size();
+//         string result;
+//         for (int i = 0; i < n; i++) {
+//             if (i > 0) {
+//                 result += " ";
+//             }
+//             result += words[i];
+//         }
+//         return result;
+//     }
+// };
+// 30 class Solution {
+//    public:
+//     vector<vector<int>> fourSum(vector<int>& nums, int target) {
+//         vector<vector<int>> result;
+//         int n = nums.size();
+//         if (n < 4) {
+//             return result;
+//         }
+//         sort(nums.begin(), nums.end());
+//         for (int i = 0; i < n - 3; ++i) {
+//             if (i > 0 && nums[i] == nums[i - 1]) {
+//                 continue;
+//             }
+//             for (int j = i + 1; j < n - 2; ++j) {
+//                 if (j > i + 1 && nums[j] == nums[j - 1]) {
+//                     continue;
+//                 }
+//                 int left = j + 1;
+//                 int right = n - 1;
+//                 while (left < right) {
+//                     long long sum =
+//                         (long long)nums[i] + nums[j] + nums[left] + nums[right];
+//                     if (sum == target) {
+//                         result.push_back(
+//                             {nums[i], nums[j], nums[left], nums[right]});
+//                         while (left < right && nums[left] == nums[left + 1]) {
+//                             left++;
+//                         }
+//                         while (left < right && nums[right] == nums[right - 1]) {
+//                             right--;
+//                         }
+//                         right--;
+//                         left++;
+//                     } else if (sum < target) {
+//                         left++;
+//                     } else {
+//                         right--;
+//                     }
+//                 }
+//             }
+//         }
+//         return result;
+//     }
+// };
+// 31 class Solution {
+//    public:
+//     bool isValid(string s) {
+//         stack<char> st;
+//         for (char c : s) {
+//             if (c == '(' || c == '[' || c == '{') {
+//                 st.push(c);
+//             } else {
+//                 if (st.empty()) {
+//                     return false;
+//                 } else if ((c == ')' && st.top() == '(') ||
+//                            (c == ']' && st.top() == '[') ||
+//                            (c == '}' && st.top() == '{')) {
+//                     st.pop();
+//                 } else {
+//                     return false;
+//                 }
+//             }
+//         }
+//         return st.empty();
+//     }
+// };
+// 32 class Solution {
+//    public:
+//     string removeDuplicates(string s) {
+//         stack<char> st;
+//         for (int i = 0; i < s.size(); i++) {
+//             if (!st.empty() && s[i] == st.top()) {
+//                 st.pop();
+//             } else {
+//                 st.push(s[i]);
+//             }
+//         }
+//         string str;
+//         while (!st.empty()) {
+//             str += st.top();
+//             st.pop();
+//         }
+//         reverse(str.begin(), str.end());
+//         return str;
+//     }
+// };
+// 33 class Solution {
+//    public:
+//     int evalRPN(vector<string>& tokens) {
+//         stack<long long> st;
+//         for (int i = 0; i < tokens.size(); i++) {
+//             if (tokens[i] == "+" || tokens[i] == "-" || tokens[i] == "*" ||
+//                 tokens[i] == "/") {
+//                 long long num1 = st.top();
+//                 st.pop();
+//                 long long num2 = st.top();
+//                 st.pop();
+//                 if (tokens[i] == "+")
+//                     st.push(num2 + num1);
+//                 if (tokens[i] == "-")
+//                     st.push(num2 - num1);
+//                 if (tokens[i] == "*")
+//                     st.push(num2 * num1);
+//                 if (tokens[i] == "/")
+//                     st.push(num2 / num1);
+//             } else {
+//                 st.push(stoll(tokens[i]));
+//             }
+//         }
+//         long long result = st.top();
+//         return result;
+//     }
+// };
